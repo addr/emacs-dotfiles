@@ -1,4 +1,8 @@
-[![Build Status](https://travis-ci.org/purcell/emacs.d.png?branch=master)](https://travis-ci.org/purcell/emacs.d)
+# My Emacs config
+
+Originally forked from [Steve Purcell](https://github.com/purcell/emacs.d), this is my Emacs config. It remains mostly intact from Steve's original repository, with some significant modifications to org mode, which I use pretty heavily. The rest of this readme is Steve's original, which I've saved for posterity.
+
+- Andy
 
 # A reasonable Emacs config
 

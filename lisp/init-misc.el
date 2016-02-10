@@ -15,5 +15,7 @@
 
 (add-auto-mode 'conf-mode "Procfile")
 
+(add-hook 'yaml-mode-hook (lambda () (electric-indent-local-mode -1)))
+
 
 (provide 'init-misc)

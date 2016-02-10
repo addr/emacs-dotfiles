@@ -1,6 +1,7 @@
 (when (< emacs-major-version 24)
   (require-package 'org))
 (require-package 'org-fstree)
+(require 'org-habit)
 (when *is-a-mac*
   (require-package 'org-mac-link)
   (autoload 'org-mac-grab-link "org-mac-link" nil t)
@@ -217,7 +218,7 @@ typical word processor."
 ;;; To-do settings
 
 (setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
+      (quote ((sequence "TODO(t)" "NEXT(n)" "OUTCOME(t)" "|" "DONE(d!/!)")
               (sequence "PROJECT(p)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
               (sequence "WAITING(w@/!)" "HOLD(h)" "|" "CANCELLED(c@/!)"))))
 
@@ -226,6 +227,7 @@ typical word processor."
               ("NEXT" :foreground "green" :weight bold)
               ("DONE" :foreground "blue" :weight bold)
               ("KRA" :foreground "black")
+              ("FOLLOW-UP" :foreground "orange" :weight bold)
               ("OUTCOME" :foreground "cyan" :weight bold)
               ("WAITING" :foreground "orange" :weight bold)
               ("HOLD" :foreground "magenta" :weight bold)
@@ -334,6 +336,69 @@ typical word processor."
                        (org-tags-match-list-sublevels nil))))
                nil))))
 
+
+;; define "R" as the prefix key for reviewing what happened in various
+;; time periods
+(add-to-list 'org-agenda-custom-commands
+             '("R" . "Review" )
+             )
+
+;; Common settings for all reviews
+(setq efs/org-agenda-review-settings
+      '((org-agenda-files '("~/org/notes.org"
+                            "~/org/projects.org"
+                            ))
+        (org-agenda-show-all-dates t)
+        (org-agenda-start-with-log-mode t)
+        (org-agenda-start-with-clockreport-mode t)
+        (org-agenda-archives-mode t)
+        ;; I don't care if an entry was archived
+        (org-agenda-hide-tags-regexp
+         (concat org-agenda-hide-tags-regexp
+                 "\\|ARCHIVE"))
+        ))
+;; Show the agenda with the log turn on, the clock table show and
+;; archived entries shown.  These commands are all the same exept for
+;; the time period.
+(add-to-list 'org-agenda-custom-commands
+             `("Rw" "Week in review"
+               agenda ""
+               ;; agenda settings
+               ,(append
+                 efs/org-agenda-review-settings
+                 '((org-agenda-span 'week)
+                   (org-agenda-start-on-weekday 0)
+                   (org-agenda-overriding-header "Week in Review"))
+                 )
+               ("~/org/review/week.html")
+               ))
+
+
+(add-to-list 'org-agenda-custom-commands
+             `("Rd" "Day in review"
+               agenda ""
+               ;; agenda settings
+               ,(append
+                 efs/org-agenda-review-settings
+                 '((org-agenda-span 'day)
+                   (org-agenda-overriding-header "Week in Review"))
+                 )
+               ("~/org/review/day.html")
+               ))
+
+(add-to-list 'org-agenda-custom-commands
+             `("Rm" "Month in review"
+               agenda ""
+               ;; agenda settings
+               ,(append
+                 efs/org-agenda-review-settings
+                 '((org-agenda-span 'month)
+                   (org-agenda-start-day "01")
+                   (org-read-date-prefer-future nil)
+                   (org-agenda-overriding-header "Month in Review"))
+                 )
+               ("~/org/review/month.html")
+               ))
 
 ;; Helper functions defined for projects which are used by agenda views (again from doc.norang.ca/org-mode.html)
 (defun bh/is-project-p ()
@@ -818,6 +883,7 @@ as the default task."
    '((R . t)
      (ditaa . t)
      (dot . t)
+     (js . t)
      (emacs-lisp . t)
      (gnuplot . t)
      (haskell . nil)

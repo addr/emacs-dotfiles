@@ -61,6 +61,7 @@
 (require 'init-sessions)
 (require 'init-fonts)
 (require 'init-mmm)
+(require 'init-json)
 
 (require 'init-editing-utils)
 
@@ -88,6 +89,7 @@
 (require 'init-ruby-mode)
 (require 'init-rails)
 (require 'init-sql)
+(require 'init-web)
 
 (require 'init-paredit)
 (require 'init-lisp)
